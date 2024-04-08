@@ -1,33 +1,44 @@
 <?php
 
-// Define web routes for your application
-Route::group(['middleware' => 'web'], function () {
-    // Load routes for 'web' middleware group
-    // Create something great!
-    Route::get('/', function () {
-        return view('welcome');
-    });
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware('auth')->name('dashboard');
+use Illuminate\Support\Facades\Route;
 
-    // Load routes for 'auth' middleware group
-    require __DIR__.'/auth.php';
 
-    // Define resource routes for members
-    Route::resource('members', 'App\Http\Controllers\MemberController');
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
 
-    // Define routes for customers
-    Route::get('/customers', 'App\Http\Controllers\CustomerController@index');
-    Route::post('/customers/create', 'App\Http\Controllers\CustomerController@create')->name('customers.create');
 
-    // Define routes for courts
-    Route::resource('courts', 'App\Http\Controllers\CourtController');
-
-    // Define resource routes for bookings
-    Route::resource('bookings', 'App\Http\Controllers\BookingController');
-
-    // Define route for displaying calendar
-    Route::get('calendar/display', 'App\Http\Controllers\CalendarController@display');
+Route::get('/', function () {
+    return view('welcome');
 });
+
+
+
+
+Route::resource('members', App\Http\Controllers\memberController::class);
+Route::get('/customers/new', 'App\Http\Controllers\CustomerController@new');
+Route::post('/customers/create', 'App\Http\Controllers\CustomerController@create')->name('customers.create'); 
+
+
+Route::get('/customers/edit/{id}', 'App\Http\Controllers\CustomerController@edit');
+Route::post('/customers/update', 'App\Http\Controllers\CustomerController@update');
+
+
+Route::resource('courts', App\Http\Controllers\courtController::class);
+
+
+
+
+Route::resource('bookings', App\Http\Controllers\bookingController::class);
+
+
+Route::get('calendar/display', 'App\Http\Controllers\CalendarController@display');
+Route::get('/calendar/json','App\Http\Controllers\CalendarController@json')->name('calendar.json');
